@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/goinaction/code/chapter2/sample/matchers"
+	_ "github.com/goinaction/code/chapter2/sample/matchers"
 	"github.com/goinaction/code/chapter2/sample/search"
 	"log"
 	"os"
