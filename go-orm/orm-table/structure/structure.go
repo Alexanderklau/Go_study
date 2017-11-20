@@ -9,17 +9,17 @@ create_time   time.Time
 这时候需要运行删除字段的命令
 */
 type User struct {
-	Uid      int     `gorm:"size:64;not null;unique;primary_key"` //uid值，长度 255, 不为空，唯一值, 主键
+	Uid      int     `gorm:"type:BIGINT(64);not null;unique;primary_key"` //uid值，长度 255, 不为空，唯一值, 主键
 	Uname    string  `gorm:"type:varchar(40);not null;unique"`
 	Password string  `gorm:"type:varchar(128)"`
-	Status   int     `gorm:"size:4"`
+	Status   int     `gorm:"type:int(4)"`
 	Group    []Group `gorm:"many2many:user_groups"` //多对多，链接表user_groups
 }
 
 type Group struct {
-	Gid             int              `gorm:"size:64;unique;primary_key"`
+	Gid             int              `gorm:"type:BIGINT(64);not null;unique;primary_key"`
 	Name            string           `gorm:"type:varchar(64);unique"`
-	Status          int              `gorm:"size:4"`
+	Status          int              `gorm:"type:int(4)"`
 	Group_relations []Group_relation `gorm:"ForeignKey:Parent_gid;AssociationForeignKey:Gid"` //一对多，外键parent_gid,关联Gid
 }
 
