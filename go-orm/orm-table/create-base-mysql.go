@@ -9,7 +9,7 @@ create_time   time.Time
 这时候需要运行删除字段的命令
 */
 import (
-	"./structure"
+	"./structure" //引入包structure
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "time"
