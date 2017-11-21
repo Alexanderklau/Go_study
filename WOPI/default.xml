@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <smtpServer>smtp.163.com</smtpServer>
+  <smtpPort>25</smtpPort>
+  <sender>user@163.com</sender>
+  <senderPasswd>123456</senderPasswd>
+  <receivers flag="true">
+    <user>Mike_Zhang@live.com</user>
+    <user>test1@qq.com</user>
+  </receivers>
+</config>
