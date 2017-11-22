@@ -7,24 +7,19 @@ import (
 	"strings"
 )
 
-func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("=======================")
-	fmt.Println(r.Proto)
-	// output:HTTP/1.1
-	fmt.Println("-----------------------")
-	fmt.Println(r.TLS)
-	// output: <nil>
+func index(w http.ResponseWriter, r *http.Request) string {
 	fmt.Println(r.Host)
 	// output: localhost:9090
 	fmt.Println(r.RequestURI)
 	// output: /index?id=1
-
+	c := r.RequestURI
 	scheme := "http://"
 	if r.TLS != nil {
 		scheme = "https://"
 	}
 	fmt.Println(strings.Join([]string{scheme, r.Host, r.RequestURI}, ""))
 	// output: http://localhost:9090/index?id=1
+	return c
 }
 
 func main() {
