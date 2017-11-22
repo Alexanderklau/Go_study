@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -109,7 +108,7 @@ func View_url(w http.ResponseWriter, r *http.Request) {
 	file_name := strings.Split(r.RequestURI, "=")[1]
 	file_postfix := strings.Split(file_name, ".")[1]
 	wopi_host := "WOPISrc=http://10.0.9.127/api/wopi/files/"
-	asseen_token := "06lhXK6zWTUi"
+	asseen_token := "&assen_token=06lhXK6zWTUi"
 	if _, ok := View_url[file_postfix]; ok {
 		fmt.Println(strings.Join([]string{View_url[file_postfix], wopi_host, file_name, asseen_token}, ""))
 	} else {
@@ -119,9 +118,9 @@ func View_url(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	Edit_url()
-	router := mux.NewRouter()
-	router.HandleFunc("/", View_url)
-	err := http.ListenAndServe(":9090", router)
+	http.HandleFunc("/", View_url)
+
+	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
