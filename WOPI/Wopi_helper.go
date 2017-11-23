@@ -134,10 +134,37 @@ func View_url(w http.ResponseWriter, r *http.Request) {
 	log.Println("View_url done.....")
 }
 
+func Download(w http.ResponseWriter, r *http.Request) {
+	View_urls := View_xml()
+	// file := strings.Split(r.RequestURI, "")[1]
+	file_name := strings.Split(r.RequestURI, "=")[1]
+	log.Println(file_name)
+	file_postfix := strings.Split(file_name, ".")[1]
+	log.Println(file_postfix)
+	wopi_host := "WOPISrc=http://10.0.9.127/api/wopi/files/"
+	access_token := "&access_token=06lhXK6zWTUi"
+	var info urlinfo
+	if _, ok := View_urls[file_postfix]; ok {
+		view_url := (strings.Join([]string{View_urls[file_postfix], wopi_host, file_name, access_token}, ""))
+		info.Url = view_url
+	} else {
+		log.Println(r.RequestURI)
+		log.Println("Error type")
+	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	log.Println(info)
+	json.NewEncoder(w).Encode(info)
+	log.Println("View_url done.....")
+}
+
 func main() {
 	rounter := mux.NewRouter()
 	rounter.HandleFunc("/api/view", View_url).Methods(http.MethodGet)
 	rounter.HandleFunc("/api/edit", Edit_url).Methods(http.MethodGet)
+
+	rounter.HandleFunc("/api/download", Download).Methods(http.MethodGet)
 
 	err := http.ListenAndServe(":9090", rounter)
 	if err != nil {
