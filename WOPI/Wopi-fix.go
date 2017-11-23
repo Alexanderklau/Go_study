@@ -103,8 +103,6 @@ func Edit_url(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.Println("Error type")
 	}
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(info)
 	log.Println("Edit_urls done.....")
@@ -126,8 +124,6 @@ func View_url(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.RequestURI)
 		log.Println("Error type")
 	}
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	log.Println(info)
 	json.NewEncoder(w).Encode(info)
