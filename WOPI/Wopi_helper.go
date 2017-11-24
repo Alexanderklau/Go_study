@@ -138,7 +138,7 @@ func View_url(w http.ResponseWriter, r *http.Request) {
 func Download(w http.ResponseWriter, r *http.Request) {
 	View_urls := View_xml()
 	file := strings.Split(r.RequestURI, "src=")[1]
-	datrix_url := "http://211.144.114.26:15300/viewer/dcomp.php?"
+	datrix_url := "http://10.0.9.139/viewer/dcomp.php?"
 	download_url := strings.Join([]string{datrix_url, file}, "")
 	file_name := strings.Split(file, "=")[1]
 	file_postfix := strings.Split(file_name, ".")[1]
