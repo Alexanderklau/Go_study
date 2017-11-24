@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/gorilla/mux"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -94,7 +95,7 @@ func Edit_url(w http.ResponseWriter, r *http.Request) {
 	log.Println(file_name)
 	file_postfix := strings.Split(file_name, ".")[1]
 	log.Println(file_postfix)
-	wopi_host := "WOPISrc=http://10.0.9.127/api/wopi/files/"
+	wopi_host := "WOPISrc=http://10.0.7.95/api/wopi/files/"
 	asseen_token := "&assen_token=06lhXK6zWTUi"
 	var info urlinfo
 	if _, ok := Edit_urls[file_postfix]; ok {
@@ -116,7 +117,7 @@ func View_url(w http.ResponseWriter, r *http.Request) {
 	file_name := strings.Split(file, "=")[1]
 	file_postfix := strings.Split(file_name, ".")[1]
 	log.Println(file_postfix)
-	wopi_host := "WOPISrc=http://10.0.9.127/api/wopi/files/"
+	wopi_host := "WOPISrc=http://10.0.7.95/api/wopi/files/"
 	access_token := "&access_token=06lhXK6zWTUi"
 	var info urlinfo
 	if _, ok := View_urls[file_postfix]; ok {
@@ -136,19 +137,29 @@ func View_url(w http.ResponseWriter, r *http.Request) {
 
 func Download(w http.ResponseWriter, r *http.Request) {
 	View_urls := View_xml()
-	// file := strings.Split(r.RequestURI, "")[1]
-	file_name := strings.Split(r.RequestURI, "=")[1]
-	log.Println(file_name)
+	file := strings.Split(r.RequestURI, "src=")[1]
+	datrix_url := "http://211.144.114.26:15300/viewer/dcomp.php?"
+	download_url := strings.Join([]string{datrix_url, file}, "")
+	file_name := strings.Split(file, "=")[1]
 	file_postfix := strings.Split(file_name, ".")[1]
-	log.Println(file_postfix)
-	wopi_host := "WOPISrc=http://10.0.9.127/api/wopi/files/"
+	file_postfixs := strings.Split(file_postfix, "&")[0]
+	file_files := strings.Split(file_name, "&")[0]
+	res, err := http.Get(download_url)
+	if err != nil {
+		panic(err)
+	}
+	f, err := os.Create(file_files)
+	if err != nil {
+		panic(err)
+	}
+	io.Copy(f, res.Body)
+	wopi_host := "WOPISrc=http://10.0.7.95/api/wopi/files/"
 	access_token := "&access_token=06lhXK6zWTUi"
 	var info urlinfo
-	if _, ok := View_urls[file_postfix]; ok {
-		view_url := (strings.Join([]string{View_urls[file_postfix], wopi_host, file_name, access_token}, ""))
+	if _, ok := View_urls[file_postfixs]; ok {
+		view_url := (strings.Join([]string{View_urls[file_postfixs], wopi_host, file_name, access_token}, ""))
 		info.Url = view_url
 	} else {
-		log.Println(r.RequestURI)
 		log.Println("Error type")
 	}
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -156,14 +167,13 @@ func Download(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	log.Println(info)
 	json.NewEncoder(w).Encode(info)
-	log.Println("View_url done.....")
+	log.Println("Download_url done.....")
 }
 
 func main() {
 	rounter := mux.NewRouter()
 	rounter.HandleFunc("/api/view", View_url).Methods(http.MethodGet)
 	rounter.HandleFunc("/api/edit", Edit_url).Methods(http.MethodGet)
-
 	rounter.HandleFunc("/api/download", Download).Methods(http.MethodGet)
 
 	err := http.ListenAndServe(":9090", rounter)
