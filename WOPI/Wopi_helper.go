@@ -159,6 +159,7 @@ func Download(w http.ResponseWriter, r *http.Request) {
 	if _, ok := View_urls[file_postfixs]; ok {
 		view_url := (strings.Join([]string{View_urls[file_postfixs], wopi_host, file_name, access_token}, ""))
 		info.Url = view_url
+		log.Println(view_url)
 	} else {
 		log.Println("Error type")
 	}
