@@ -52,8 +52,9 @@ func Edit_xml() map[string]string {
 	for k, _ := range v.Net.App.Action {
 		if strings.EqualFold(v.Net.App.Action[k].Type, "edit") {
 			url := strings.Split(v.Net.App.Action[k].Url, "<")[0]
+			proxy := strings.Replace(url, "10.0.7.96", "10.0.7.95:8090", -1)
 			file_type := v.Net.App.Action[k].Name
-			Edit_dict[file_type] = url
+			Edit_dict[file_type] = proxy
 		} else {
 			continue
 		}
@@ -77,8 +78,9 @@ func View_xml() map[string]string {
 	for k, _ := range v.Net.App.Action {
 		if strings.EqualFold(v.Net.App.Action[k].Type, "view") {
 			url := strings.Split(v.Net.App.Action[k].Url, "<")[0]
+			proxy := strings.Replace(url, "10.0.7.96", "10.0.7.95:8090", -1)
 			file_type := v.Net.App.Action[k].Name
-			View_dict[file_type] = url
+			View_dict[file_type] = proxy
 		} else {
 			continue
 		}
@@ -109,30 +111,6 @@ func Edit_url(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(info)
 	log.Println("Edit_urls done.....")
-}
-
-func View_url(w http.ResponseWriter, r *http.Request) {
-	View_urls := View_xml()
-	file := strings.Split(r.RequestURI, "src=")[1]
-	file_name := strings.Split(file, "=")[1]
-	file_postfix := strings.Split(file_name, ".")[1]
-	log.Println(file_postfix)
-	wopi_host := "WOPISrc=http://10.0.7.95/api/wopi/files/"
-	access_token := "&access_token=06lhXK6zWTUi"
-	var info urlinfo
-	if _, ok := View_urls[file_postfix]; ok {
-		view_url := (strings.Join([]string{View_urls[file_postfix], wopi_host, file_name, access_token}, ""))
-		info.Url = view_url
-	} else {
-		log.Println(r.RequestURI)
-		log.Println("Error type")
-	}
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Content-Type", "application/json")
-	log.Println(info)
-	json.NewEncoder(w).Encode(info)
-	log.Println("View_url done.....")
 }
 
 func Download(w http.ResponseWriter, r *http.Request) {
@@ -173,7 +151,6 @@ func Download(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	rounter := mux.NewRouter()
-	rounter.HandleFunc("/api/view", View_url).Methods(http.MethodGet)
 	rounter.HandleFunc("/api/edit", Edit_url).Methods(http.MethodGet)
 	rounter.HandleFunc("/api/download", Download).Methods(http.MethodGet)
 
