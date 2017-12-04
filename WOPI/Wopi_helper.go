@@ -52,7 +52,7 @@ func Edit_xml() map[string]string {
 	for k, _ := range v.Net.App.Action {
 		if strings.EqualFold(v.Net.App.Action[k].Type, "edit") {
 			url := strings.Split(v.Net.App.Action[k].Url, "<")[0]
-			proxy := strings.Replace(url, "10.0.7.96", "10.0.7.95:8090", -1)
+			proxy := strings.Replace(url, "10.0.7.96", "10.0.7.76:8090", -1)
 			file_type := v.Net.App.Action[k].Name
 			Edit_dict[file_type] = proxy
 		} else {
@@ -78,7 +78,7 @@ func View_xml() map[string]string {
 	for k, _ := range v.Net.App.Action {
 		if strings.EqualFold(v.Net.App.Action[k].Type, "view") {
 			url := strings.Split(v.Net.App.Action[k].Url, "<")[0]
-			proxy := strings.Replace(url, "10.0.7.96", "10.0.7.95:8090", -1)
+			proxy := strings.Replace(url, "10.0.7.96", "10.0.7.76", -1)
 			file_type := v.Net.App.Action[k].Name
 			View_dict[file_type] = proxy
 		} else {

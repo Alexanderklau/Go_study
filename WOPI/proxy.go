@@ -19,7 +19,7 @@ func NewMultipleHostsReverseProxy(targets []*url.URL) *httputil.ReverseProxy {
 }
 
 func main() {
-	target, _ := url.Parse("http://10.0.7.96")
+	target, _ := url.Parse("http://10.0.7.96/")
 	proxy := NewMultipleHostsReverseProxy(target)
-	log.Fatal(http.ListenAndServe(":9090", proxy))
+	log.Fatal(http.ListenAndServe(":8090", proxy))
 }

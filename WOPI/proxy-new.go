@@ -1,35 +1,29 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gamexg/proxyclient"
-	"time"
+	"log"
+	"math/rand"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
 )
 
+func NewMultipleHostsReverseProxy(targets []*url.URL) *httputil.ReverseProxy {
+	director := func(req *http.Request) {
+		target := targets[rand.Int()%len(targets)]
+		req.URL.Scheme = target.Scheme
+		req.URL.Host = target.Host
+		req.URL.Path = target.Path
+	}
+	return &httputil.ReverseProxy{Director: director}
+}
+
 func main() {
-	p, err := proxyclient.NewProxyClient("http://127.0.0.1:7777")
-	if err != nil {
-		panic(err)
-	}
-
-	t := time.Now()
-	c, err := p.Dial("tcp", "www.baidu.com:443")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("连接耗时：", time.Now().Sub(t))
-
-	if _, err := c.Write([]byte("GET / HTTP/1.0\r\nHOST:www.baidu.com\r\n\r\n")); err != nil {
-		panic(err)
-	}
-
-	b := make([]byte, 2048)
-
-	if n, err := c.Read(b); err != nil {
-		panic(err)
-	} else {
-		fmt.Print(string(b[:n]))
-	}
-
-	c.Close()
+	proxy := NewMultipleHostsReverseProxy([]*url.URL{
+		{
+			Scheme: "http",
+			Host:   "10.0.7.96",
+		},
+	})
+	log.Fatal(http.ListenAndServe(":8090", proxy))
 }

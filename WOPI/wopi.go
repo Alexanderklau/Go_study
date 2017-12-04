@@ -221,6 +221,7 @@ func main() {
 	router.HandleFunc("/api/wopi/files/{file_name}/contents", PostFileContent).Methods(http.MethodPost)
 
 	err := http.ListenAndServe(":80", router)
+	log.Println(router)
 	if err != nil {
 		log.Println("http listen err: ", err)
 	}
