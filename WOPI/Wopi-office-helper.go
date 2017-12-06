@@ -180,6 +180,7 @@ func main() {
 	rounter := mux.NewRouter()
 	rounter.HandleFunc("/api/edit", Edit_url).Methods(http.MethodGet)
 	rounter.HandleFunc("/api/download", Download).Methods(http.MethodGet)
+	http.Handle("/", http.FileServer(http.Dir("office")))
 
 	err := http.ListenAndServe(":9090", rounter)
 	if err != nil {
