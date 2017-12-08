@@ -220,7 +220,7 @@ func main() {
 	router.HandleFunc("/api/wopi/files/{file_name}/contents", GetFileContent).Methods(http.MethodGet)
 	router.HandleFunc("/api/wopi/files/{file_name}/contents", PostFileContent).Methods(http.MethodPost)
 
-	err := http.ListenAndServe(":80", router)
+	err := http.ListenAndServe(":8080", router)
 	log.Println(router)
 	if err != nil {
 		log.Println("http listen err: ", err)
