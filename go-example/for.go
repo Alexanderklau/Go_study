@@ -10,7 +10,7 @@ func main() {
 		i = i + 1
 	}
 
-	for j := 7; i <= 9; j++ {
+	for j := 7; j <= 9; j++ {
 		fmt.Println(j)
 	}
 
