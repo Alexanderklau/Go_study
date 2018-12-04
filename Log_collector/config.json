@@ -1,0 +1,7 @@
+{
+    "ip": "127.0.0.1",
+    "log_type": "monlog",
+    "port":"9200",
+    "enabled": true,
+    "path": "/media/lau/datas/home/lau/Code/Go-project/Log_collector/monlog.log"
+}
